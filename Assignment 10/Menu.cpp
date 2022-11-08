@@ -51,13 +51,6 @@ void init_tree_strings()
 
 	cout << "n\t1. Growing a tree (strings)\n";
 	binary_tree_node<string>* root = nullptr;
-
-	root = new binary_tree_node<string>;
-	root->setData("trunk");
-
-	cout << "\n\tA> root (trunk) with no branches.\n\n";
-	print_tree("\t\t", root, false, true, false);
-
 	binary_tree_node<string>* branch1 = new binary_tree_node<string>;
 	binary_tree_node<string>* branch2 = new binary_tree_node<string>;
 	binary_tree_node<string>* leftLeaf1 = new binary_tree_node<string>;
@@ -67,6 +60,13 @@ void init_tree_strings()
 	binary_tree_node<string>* fruit = new binary_tree_node<string>;
 	binary_tree_node<string>* fruit2 = new binary_tree_node<string>;
 	binary_tree_node<string>* fruit3 = new binary_tree_node<string>;
+
+	root = new binary_tree_node<string>;
+	root->setData("trunk");
+
+	cout << "\n\tA> root (trunk) with no branches.\n\n";
+	print_tree("\t\t", root, false, true, false);
+
 
 	branch1->setData("branch #1");
 
@@ -119,6 +119,7 @@ void init_tree_strings()
 		cout << '\n';
 		print_tree("\t\t", root, false, true, false);
 	}
+
 }
 
 
@@ -137,44 +138,84 @@ char tree_container_Menu() {
 		<< "\n\t" << string(80, char(196))
 		<< "\n\t\t 0. return"
 		<< "\n\t" << string(80, char(205)) << endl;
-	return inputChar("\n\t\t Option: ", menuChoice, strlen(menuChoice));
+	return inputChar("\n\t\tOption: ", menuChoice, strlen(menuChoice));
 }
 
 // 2. Tree container of integers
 void init_tree_container() {
 	int count = 0;
+	int search = 0;
+	bool node_set = false;
 	binary_tree_node<int>* root = nullptr;
+	binary_tree_node<int>* tempt = nullptr;
 	root = new binary_tree_node<int>;
+	root->setData(-1);
+	
+	
+
 	do {
 		switch (tree_container_Menu())
 		{
 		case 'A':
-
+			node_set = true;
 			system("pause");
 			break;
 		case 'B':
-			cout << "\n\tCount of Nodes: " << tree_count(root,count)-1 << "\n\t";
+			cout << "\n\tCount of Nodes: " << (tree_count(root,count) - (node_set == true) ? 0 : 1) << "\n\n\t";
 			count = 0;
 			system("pause");
 			break;
 		case 'C':
+			if (node_set == true) {
+				search = inputInteger("\n\tEnter an integer key to search: ");
+				if (binary_search(root, search)) {
+					cout << "\n\t" << search << " has been found." << "\n\n\t";
+				}
+				else {
+					cout << "\n\t" << search << " has not been found." << "\n\n\t";
+				}
+			}
+			else {
+				cout << "\n\tERROR: bTree is empty." << "\n\n\t";
+			}
 			system("pause");
 			break;
 		case 'D':
-			preorder_print(root);
+			if (node_set == true) {
+				preorder_print(root);
+			}
+			else {
+				cout << "\n\tERROR: bTree is empty." << "\n\n\t";
+			}
 			system("pause");
 			break;
 		case 'E':
-			inorder_print(root);
+			if (node_set == true) {
+				inorder_print(root);
+			}
+			else {
+				cout << "\n\tERROR: bTree is empty." << "\n\n\t";
+			}
 			system("pause");
 			break;
 		case 'F':
-			postorder_print(root);
+			if (node_set == true) {
+				postorder_print(root);
+			}
+			else {
+				cout << "\n\tERROR: bTree is empty." << "\n\n\t";
+			}
 			system("pause");
 			break;
 		case 'G':
-
-			delete_tree<int>(root);
+			if (node_set == true) {
+				delete_tree<int>(root);
+				cout << "\n\n\t";
+				node_set = false;
+			}
+			else {
+				cout << "\n\tERROR: bTree is empty." << "\n\n\t";
+			}
 			system("pause");
 			break;
 		case '0': return; break;
@@ -210,10 +251,5 @@ void init_tree_container() {
 
 // 3. Animal Guessing Game
 void init_animal_guessing_game() {
-
-}
-
-void binarySearch(int lowBound, int highBound, int numberOfGuesses)
-{
 
 }
