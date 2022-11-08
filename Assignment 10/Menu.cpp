@@ -123,6 +123,8 @@ void init_tree_strings()
 }
 
 
+
+// 2. Tree container of integers
 char tree_container_Menu() {
 	system("cls");
 	char menuChoice[] = "abcdefg0";
@@ -134,24 +136,20 @@ char tree_container_Menu() {
 		<< "\n\t\t D. Pre-order traversal"
 		<< "\n\t\t E. In-order traversal"
 		<< "\n\t\t F. Post-order traveral"
-		<< "\n\t\t G. Post-order traveral"
+		<< "\n\t\t G. Delete the entire tree"
 		<< "\n\t" << string(80, char(196))
 		<< "\n\t\t 0. return"
 		<< "\n\t" << string(80, char(205)) << endl;
 	return inputChar("\n\t\tOption: ", menuChoice, strlen(menuChoice));
 }
 
-// 2. Tree container of integers
 void init_tree_container() {
 	int count = 0;
 	int search = 0;
 	bool node_set = false;
 	binary_tree_node<int>* root = nullptr;
-	binary_tree_node<int>* tempt = nullptr;
 	root = new binary_tree_node<int>;
 	root->setData(-1);
-	
-	
 
 	do {
 		switch (tree_container_Menu())
@@ -210,6 +208,7 @@ void init_tree_container() {
 		case 'G':
 			if (node_set == true) {
 				delete_tree<int>(root);
+				root = NULL;
 				cout << "\n\n\t";
 				node_set = false;
 			}
@@ -250,6 +249,21 @@ void init_tree_container() {
 }
 
 // 3. Animal Guessing Game
-void init_animal_guessing_game() {
 
+char animal_Menu() {
+	system("cls");
+	char menuChoice[] = "ab0";
+	cout << "\n\n\t 3. Welcome to Animal Guessing Game"
+		<< "\n\t" << string(80, char(205))
+		<< "\n\t\t A. Play the game"
+		<< "\n\t\t B. Save the game file"
+		<< "\n\t" << string(80, char(196))
+		<< "\n\t\t 0. return"
+		<< "\n\t" << string(80, char(205)) << endl;
+	return inputChar("\n\t\tOption: ", menuChoice, strlen(menuChoice));
+}
+
+void init_animal_guessing_game() {
+	fstream file;
+	
 }

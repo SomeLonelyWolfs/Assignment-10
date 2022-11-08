@@ -4,6 +4,7 @@
 // Description: binary tree node for growing a tree
 #include <iostream>
 #include <string>
+#include <queue>
 using namespace std;
 
 template <class Item>
@@ -73,6 +74,46 @@ public:
     bool isLeaf() const
     {
         return (left == NULL && right == NULL);
+    }
+
+    binary_tree_node* CreateNode(int data)
+    {
+        binary_tree_node* newNode = new binary_tree_node();
+        newNode->setData(data);
+        newNode->setLeft(NULL);
+        newNode->setRight(NULL);
+        return newNode;
+    }
+    
+    binary_tree_node* InsertNode(binary_tree_node* root, int data)
+    {
+        // If the tree is empty, assign new node address to root
+        if (root == NULL) {
+            root = CreateNode(data);
+            return root;
+        }
+
+        queue<binary_tree_node*> q;
+        q.push(root);
+
+        while (!q.empty()) {
+            binary_tree_node* temp = q.front();
+            q.pop();
+
+            if (temp->getLeft() != NULL)
+                q.push(temp->getLeft());
+            else {
+                temp->setLeft(CreateNode(data));
+                return root;
+            }
+
+            if (temp->getRight() != NULL)
+                q.push(temp->getRight());
+            else {
+                temp->setRight(CreateNode(data));
+                return root;
+            }
+        }
     }
 
 };
