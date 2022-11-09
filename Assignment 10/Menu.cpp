@@ -3,6 +3,7 @@
 #include<string>
 #include<cstring>
 #include<fstream>
+#include <queue>
 #include"Input.h"
 #include"Menu.h"
 #include"binary_tree_node.h"
@@ -149,17 +150,18 @@ void init_tree_container() {
 	bool node_set = false;
 	binary_tree_node<int>* root = nullptr;
 	root = new binary_tree_node<int>;
-	root->setData(-1);
-
+	root = NULL;
 	do {
 		switch (tree_container_Menu())
 		{
 		case 'A':
 			node_set = true;
+			search = inputInteger("\n\tEnter an integer: ");
+			root = root->InsertNode(root,search);
 			system("pause");
 			break;
 		case 'B':
-			cout << "\n\tCount of Nodes: " << (tree_count(root,count) - (node_set == true) ? 0 : 1) << "\n\n\t";
+			cout << "\n\tCount of Nodes: " << (tree_count(root,count) - 0) << "\n\n\t";
 			count = 0;
 			system("pause");
 			break;
@@ -265,5 +267,90 @@ char animal_Menu() {
 
 void init_animal_guessing_game() {
 	fstream file;
+	string input = "";
+	binary_tree_node<string>* root = nullptr;
+	binary_tree_node<string>* tempt= nullptr;
+	binary_tree_node<string>* tree = nullptr;
+	queue<binary_tree_node<string>*> tempt_node;
+	queue<binary_tree_node<string>*> choices;
+	file.open("animal.txt");
+	while (getline(file,input)) {
+		tempt = tempt->CreateNode(input);
+		choices.push(tempt);
+	}
+	// Set up initial root question
+	tree = choices.front();
+	choices.pop();
+	// Set up initial next left value
+	tempt = choices.front();
+	choices.pop();
+	while (!choices.empty()) {
+		//
+		
+		if (choices.front()->getData()[0] == '[') {
+			if (tempt->getData()[0] == '[') {
+				tempt_node.push(tempt);
+				tempt = choices.front();
+				choices.pop();
+				continue;
+			}
+		}
+
+		if (choices.front()->getData()[0] == '(') {
+			if (tempt->getData()[0] == '[') {
+				if (tempt->getLeft()== NULL) {
+					tempt->setLeft(choices.front());
+					choices.pop();
+					continue;
+				}
+				if (tempt->getRight() == NULL) {
+					tempt->setRight(choices.front());
+					choices.pop();
+					continue;
+				}
+				if (!tempt->isLeaf()) {
+					tempt_node.push(tempt);
+					tempt = choices.front();
+					continue;
+				}
+			}
+		}
+
+
+		tempt_node.push(choices.front());
+		choices.pop();
+	}
 	
+		tempt = tempt_node.front();
+		tree->setLeft(tempt);
+		tempt_node.pop();
+		tempt = tempt_node.front();
+		if (tempt->isLeaf()&& !tempt_node.empty()) {
+			tempt_node.pop();
+			tempt->setLeft(tempt_node.front());
+			tempt_node.pop();
+			tempt->setRight(tempt_node.front());
+		}
+	
+		tree->setRight(tempt);
+		root = tree;
+	print_tree("\t\t", root, false, true, false);
+	delete_tree(root);
+	/*
+	do {
+		switch (animal_Menu())
+		{
+		case 'A':
+
+			system("pause");
+			break;
+		case 'B':
+
+			system("pause");
+			break;
+		case '0': return; break;
+		}
+	} while (true);
+	*/
+	file.close();
 }

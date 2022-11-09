@@ -1,5 +1,5 @@
 #pragma once
-// Name: prof Q
+// Name: Prof Q, Ba Dieu
 // Date: 11-3-2021
 // Description: binary tree node for growing a tree
 #include <iostream>
@@ -76,7 +76,8 @@ public:
         return (left == NULL && right == NULL);
     }
 
-    binary_tree_node* CreateNode(int data)
+
+    binary_tree_node* CreateNode(Item data)
     {
         binary_tree_node* newNode = new binary_tree_node();
         newNode->setData(data);
@@ -85,7 +86,7 @@ public:
         return newNode;
     }
     
-    binary_tree_node* InsertNode(binary_tree_node* root, int data)
+    binary_tree_node* InsertNode(binary_tree_node* root, Item data)
     {
         // If the tree is empty, assign new node address to root
         if (root == NULL) {
@@ -115,7 +116,7 @@ public:
             }
         }
     }
-
+    //
 };
 
 template<class Item>
