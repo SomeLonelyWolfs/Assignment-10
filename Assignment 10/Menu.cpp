@@ -268,12 +268,22 @@ char animal_Menu() {
 void init_animal_guessing_game() {
 	fstream file;
 	string input = "";
+	string dir = "animal.txt";
+	char choice;
 	binary_tree_node<string>* root = nullptr;
 	binary_tree_node<string>* tempt= nullptr;
 	binary_tree_node<string>* tree = nullptr;
 	queue<binary_tree_node<string>*> tempt_node;
 	queue<binary_tree_node<string>*> choices;
-	file.open("animal.txt");
+	bool running = true;
+	// This is the start of setting up the tree
+	file.open(dir);
+	if (file.fail()) {
+		cout << "\n\tError: Unable to open or locate " << dir << "\n\t";
+		cout << "\n\tExiting Program... " << "\n\t";
+		file.close();
+		return ;
+	}
 	while (getline(file,input)) {
 		tempt = tempt->CreateNode(input);
 		choices.push(tempt);
@@ -320,28 +330,63 @@ void init_animal_guessing_game() {
 		tempt_node.push(choices.front());
 		choices.pop();
 	}
-	
+	bool flip = false; 
+	do {
+		if (!tempt_node.empty() && tempt_node.size() != 1) {
 		tempt = tempt_node.front();
-		tree->setLeft(tempt);
-		tempt_node.pop();
-		tempt = tempt_node.front();
-		if (tempt->isLeaf()&& !tempt_node.empty()) {
+
+		}
+		if (tree->isLeaf() || tempt_node.size() == 1) {
+			if (flip == false) {
+				tree->setLeft(tempt);
+				tempt_node.pop();
+				flip = true;
+				continue;
+			}
+			else {
+				tree->setRight(tempt);
+				tempt_node.pop();
+				flip = false;
+				continue;
+			}
+		
+		}
+		if (tempt_node.front()->isLeaf() && !tempt_node.empty() && tempt_node.size() != 1) {
+			tempt = tempt_node.front();
 			tempt_node.pop();
 			tempt->setLeft(tempt_node.front());
 			tempt_node.pop();
 			tempt->setRight(tempt_node.front());
+			continue;
 		}
-	
-		tree->setRight(tempt);
-		root = tree;
-	print_tree("\t\t", root, false, true, false);
-	delete_tree(root);
+	} while (!tempt_node.empty());
+
+	root = tree;
+	file.close();
+	// This is the end of setting up the tree
+	//print_tree("\t\t", root, false, true, false);
+	//delete_tree(root);
 	/*
+	*/
 	do {
 		switch (animal_Menu())
 		{
 		case 'A':
-
+			system("cls");
+			cout << "\n\tThink of an animal and ";
+			system("pause");
+			cout << "\n\t";
+			while (!root->isLeaf() || running == true) {
+				if (root->getData()[0] == '[') {
+				choice = inputChar("\n\t" + root->getData(), 'Y', 'N');
+				(choice == 'Y') ? root = root->getLeft() : root = root->getRight();
+				}
+				else {
+					running = false;
+					cout << "\n\tYour animal is a: " << root->getData() << "\n\t";
+				}
+			}
+			root = tree;
 			system("pause");
 			break;
 		case 'B':
@@ -351,6 +396,4 @@ void init_animal_guessing_game() {
 		case '0': return; break;
 		}
 	} while (true);
-	*/
-	file.close();
 }
