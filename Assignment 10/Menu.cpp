@@ -363,6 +363,7 @@ void init_animal_guessing_game() {
 
 	root = tree;
 	file.close();
+	tempt = tempt->CreateNode("");
 	// This is the end of setting up the tree
 	//print_tree("\t\t", root, false, true, false);
 	//delete_tree(root);
@@ -372,18 +373,29 @@ void init_animal_guessing_game() {
 		switch (animal_Menu())
 		{
 		case 'A':
+			running = true;
 			system("cls");
 			cout << "\n\tThink of an animal and ";
 			system("pause");
 			cout << "\n\t";
 			while (!root->isLeaf() || running == true) {
 				if (root->getData()[0] == '[') {
-				choice = inputChar("\n\t" + root->getData(), 'Y', 'N');
+				choice = inputChar("\n\t" + root->getData() + "(Y/N): ", 'Y', 'N');
 				(choice == 'Y') ? root = root->getLeft() : root = root->getRight();
 				}
 				else {
 					running = false;
-					cout << "\n\tYour animal is a: " << root->getData() << "\n\t";
+					choice = inputChar("\n\tIs your animal a(n) " + root->getData() + "? (Y/N): ", 'Y', 'N');
+					if (choice == 'Y') {
+						cout << "\n\tYes, I knew it all along!";
+					}
+					else {
+						input = inputString("\n\tI give up. What are you?\n\t",true);
+						tempt = tempt->InsertNode(tempt,input);
+						cout << "\n\tI was so close!";
+						
+
+					}
 				}
 			}
 			root = tree;
